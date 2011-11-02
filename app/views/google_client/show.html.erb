@@ -1,0 +1,54 @@
+<style >
+#oauth {
+  margin-left: 10%;
+  width: 80%;
+  font-size: 1em; 
+  font-family: 'Verdana', 'Helvetica', 'Arial';
+}
+
+#oauth h2{
+  margin-top: 50px;
+  color: #47C3D3;
+}
+
+#oauth dt{
+  float: left;
+  font-weight: bold;
+  width: 30%;
+}
+
+#oauth dd{
+  width: 70%;
+}
+
+#oauth p{
+  margin-top: 50px;
+}
+
+#oauth .email{
+  float: right;
+}
+
+</style>
+
+<div id="oauth">
+  <h2>OAuth Engine</h2>
+  <p><h4>This is the data retrieved as result of the OAuth process:</h4></p>
+  <dl>
+    <dt>User access token</dt>
+    <dd><%=@data[:access_token]%></dd>
+    <dt>Token type</dt>
+    <dd><%=@data[:token_type]%></dd>
+    <dt>Expires in</dt>
+    <dd><%=@data[:expires_in]%></dd>
+    <dt>Refresh token</dt>
+    <dd><%=@data[:refresh_token]%></dd>
+  </dl>
+  <p>
+    So now that you have it working, please go to the configuration initializer and set up a cool forward page instead of this :)
+  </p>
+  <p class="email">
+    juandebravo at gmail dot com
+  </p>
+  
+</div>

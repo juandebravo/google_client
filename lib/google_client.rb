@@ -1,6 +1,8 @@
 require 'json'
 require "google_client/version"
 
+require 'google_client/engine' if defined?(Rails)
+
 module GoogleClient
   
   autoload :AuthenticationError, 'google_client/error'

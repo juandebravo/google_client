@@ -37,7 +37,13 @@ module GoogleClient
 
     def post(path, body = {}, headers = {})
       uri = create_uri(path, {})
-      RestClient.post(uri.to_s, body.to_json, self.headers.merge(headers)) do |response, request, result, &block|
+
+      _headers = self.headers.merge(headers)
+      if _headers.has_key?("Content-Type") && _headers["Content-Type"].eql?("json")
+        body.is_a?(Hash) and body = body.to_json
+      end
+
+      RestClient.post(uri.to_s, body, _headers) do |response, request, result, &block|
         handle_response(response, request, result, &block)
       end
     end
@@ -48,6 +54,14 @@ module GoogleClient
       RestClient.delete(uri.to_s, headers.merge({:Authorization => self.headers[:Authorization]})) do |response, request, result, &block|
         handle_response(response, request, result, &block)
       end
+    end
+
+    def create_uri(path, query_params = {})
+      Addressable::URI.new({:host => @host, 
+                                  :port => @port, 
+                                  :scheme => @scheme, 
+                                  :path => path,
+                                  :query => create_query(query_params)})
     end
 
     private
@@ -91,20 +105,12 @@ module GoogleClient
       when 500..599
         #logger.warn("Error while accessing Backchat")
         #logger.warn("#{result.code} => #{result.message}")
-        raise BackchatClient::Error::ServerError.new(result)
+        raise Error.new(result.body)
       else
         #logger.warn("Error while accessing Backchat")
         #logger.warn("#{result.code} => #{result.message}")
         response.return!(request, result, &block)
       end
-    end
-
-    def create_uri(path, query_params = {})
-      Addressable::URI.new({:host => @host, 
-                                  :port => @port, 
-                                  :scheme => @scheme, 
-                                  :path => path,
-                                  :query => create_query(query_params)})
     end
 
     ##
