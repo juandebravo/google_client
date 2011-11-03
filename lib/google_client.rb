@@ -7,6 +7,7 @@ module GoogleClient
   
   autoload :AuthenticationError, 'google_client/error'
   autoload :Calendar           , 'google_client/calendar'
+  autoload :Contact            , 'google_client/contact'
   autoload :Error              , 'google_client/error'
   autoload :Event              , 'google_client/event'
   autoload :Format             , 'google_client/format'

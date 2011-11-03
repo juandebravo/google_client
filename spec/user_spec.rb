@@ -17,7 +17,7 @@ describe GoogleClient::User do
 
       calendars = GoogleClient::User.new(USER_TOKEN).calendar
       calendars.should be_instance_of(Array)
-      calendars.length.should eql(9)
+      calendars.length.should eql(2)
       calendars.each do |calendar|
         calendar.should respond_to(:id)
         calendar.id.should_not be_empty
@@ -42,8 +42,27 @@ describe GoogleClient::User do
             :headers => {"Accept" => "application/json", "Content-Type" => "application/json", :Authorization => "OAuth #{USER_TOKEN}"}).
             to_return(:status => 200, :body => GoogleResponseMocks.create_calendar, :headers => {})
       calendar = GoogleClient::User.new(USER_TOKEN).create_calendar({:title => "foo", :details => "bar"})
+      calendar.should be_instance_of(GoogleClient::Calendar)
       calendar.id.should eql(NEW_CALENDAR_ID)
       calendar.title.should eql("foo")
+    end
+  end
+
+  describe "while fetching contacts" do
+
+    it "should fetch all the user contacts when no filter is provided" do
+      stub_request(:get, "https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=1000").
+            with(:headers => {"Accept" => "application/json", "Content-Type" => "application/json", :Authorization => "OAuth #{USER_TOKEN}"}).
+            to_return(:status => 200, :body => GoogleResponseMocks.all_contacts(100), :headers => {})
+      
+      contacts = GoogleClient::User.new(USER_TOKEN).contacts
+      contacts.should be_instance_of(Array)
+      contacts.length.should eql(100)
+      contacts.each do |contact|
+        contact.should be_instance_of(GoogleClient::Contact)
+        contact.should have_valid_attributes CONTACT_NAME, [CONTACT_EMAIL], [CONTACT_PN]
+      end
+      
     end
   end
 

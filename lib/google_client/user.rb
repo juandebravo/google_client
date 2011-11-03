@@ -67,7 +67,12 @@ module GoogleClient
                     Calendar.create(params.merge({:user => self}))
                   end
       calendar.save
+    end
 
+    def contacts
+      contacts = decode_response http.get "/m8/feeds/contacts/default/full", {"max-results" => "1000"}
+      contacts = contacts["feed"]["entry"]
+      contacts.map{|contact| Contact.build_contact(contact, self)}
     end
 
     ##
