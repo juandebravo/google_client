@@ -66,4 +66,38 @@ describe GoogleClient::User do
     end
   end
 
+  describe "while refreshing auth token" do
+    describe "when credentials are valid" do
+      it "should return a valid access token" do
+        refresh_token = "valid-refresh-token"
+        stub_request(:post, "https://accounts.google.com/o/oauth2/token?").
+            with(:body => "client_id=#{CLIENT_ID}&client_secret=#{CLIENT_SECRET}&refresh_token=#{refresh_token}&grant_type=refresh_token",
+            :headers => {"Content-Type" => "application/x-www-form-urlencoded", :Authorization => "OAuth #{USER_TOKEN}"}).
+            to_return(:status => 200, :body => GoogleResponseMocks.refresh_token, :headers => {})
+        user = GoogleClient::User.new(USER_TOKEN)    
+        token = user.refresh refresh_token, CLIENT_ID, CLIENT_SECRET
+        token.should be_instance_of(Hash)
+        ["access_token", "token_type", "expires_in"].each do |key|
+          token.should have_key key
+        end
+        user.oauth_credentials.should eql USER_TOKEN
+      end
+
+      it "should return a valid access token and update the oauth credentials" do
+        refresh_token = "valid-refresh-token"
+        stub_request(:post, "https://accounts.google.com/o/oauth2/token?").
+            with(:body => "client_id=#{CLIENT_ID}&client_secret=#{CLIENT_SECRET}&refresh_token=#{refresh_token}&grant_type=refresh_token",
+            :headers => {"Content-Type" => "application/x-www-form-urlencoded", :Authorization => "OAuth #{USER_TOKEN}"}).
+            to_return(:status => 200, :body => GoogleResponseMocks.refresh_token, :headers => {})
+        user = GoogleClient::User.new(USER_TOKEN)    
+        token = user.refresh! refresh_token, CLIENT_ID, CLIENT_SECRET
+        token.should be_instance_of(Hash)
+        ["access_token", "token_type", "expires_in"].each do |key|
+          token.should have_key key
+        end
+        user.oauth_credentials.should eql "a-valid-new-access-token"
+      end
+    end
+  end
+
 end

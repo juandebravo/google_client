@@ -33,6 +33,40 @@ module GoogleClient
       Profile.new
     end
 
+    # Refresh an invalid access_token
+    # ==== Parameters
+    # * *refresh_token*
+    # * *client_id*
+    # * *client_secret*
+    #
+    # ==== Return
+    # * Hash with the following keys:
+    #   * access_token
+    #   * token_type
+    #   * expires_in
+    # * BadRequestError if invalid refresh token or invalid client
+    def refresh refresh_token, client_id, client_secret
+      _params = {
+        :client_id => client_id,
+        :client_secret => client_secret,
+        :refresh_token => refresh_token,
+        :grant_type => "refresh_token"
+      }
+      data = HttpConnection.new("https://accounts.google.com", 
+                                    {:alt => "json"}, 
+                                    {:Authorization => "OAuth #{oauth_credentials}",
+                                     "Content-Type" => "application/x-www-form-urlencoded",
+                                     :Accept => "application/json"}).post "/o/oauth2/token", _params
+      decode_response data.body
+    end
+
+    # Same as refresh method, but also updates the oauth_credentials variable with the new granted token
+    def refresh! refresh_token, client_id, client_secret
+      data = refresh refresh_token, client_id, client_secret
+      @oauth_credentials = data["access_token"]
+      data
+    end
+
     ##
     # 
     # ==== Parameters

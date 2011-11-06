@@ -1,4 +1,7 @@
 
+CLIENT_ID = "this-should-be-a-valid-client-id"
+CLIENT_SECRET = "this-should-be-a-valid-client-secret"
+
 USER_TOKEN = "this-should-be-a-valid-authentication-token"
 
 CALENDAR_ID = "this-should-be-a-valid-calendar-id"
@@ -105,5 +108,9 @@ module GoogleResponseMocks
 
   def self.all_contacts(contacts=10)
     "{\"feed\":{\"entry\":[#{Array.new(contacts,one_contact).join(',')}]}}"    
+  end
+
+  def self.refresh_token
+    '{"access_token":"a-valid-new-access-token","token_type":"Bearer","expires_in":3600}'
   end
 end
