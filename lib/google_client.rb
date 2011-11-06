@@ -6,13 +6,14 @@ require 'google_client/engine' if defined?(Rails)
 module GoogleClient
   
   autoload :AuthenticationError, 'google_client/error'
+  autoload :BadRequestError    , 'google_client/error'
   autoload :Calendar           , 'google_client/calendar'
   autoload :Contact            , 'google_client/contact'
   autoload :Error              , 'google_client/error'
   autoload :Event              , 'google_client/event'
   autoload :Format             , 'google_client/format'
   autoload :HttpConnection     , 'google_client/http_connection'
-  autoload :NotFound           , 'google_client/error'
+  autoload :NotFoundError      , 'google_client/error'
   autoload :User               , 'google_client/user'
 
   class << self

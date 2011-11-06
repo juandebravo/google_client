@@ -1,8 +1,13 @@
 module GoogleClient
+
   Error = Class.new StandardError
   
-  NotFound = Class.new Error
+  NotFoundError = Class.new Error
 
   AuthenticationError = Class.new Error
+
+  BadRequestError = Class.new Error
+
+  ConflictError = Class.new Error
 
 end
