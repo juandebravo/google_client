@@ -14,6 +14,7 @@ module GoogleClient
   autoload :Format             , 'google_client/format'
   autoload :HttpConnection     , 'google_client/http_connection'
   autoload :NotFoundError      , 'google_client/error'
+  autoload :Profile            , 'google_client/profile'
   autoload :User               , 'google_client/user'
 
   class << self

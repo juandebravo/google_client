@@ -6,25 +6,15 @@ module GoogleClient
 
     include Format
 
-    class Profile
-      attr_accessor :email
-      attr_accessor :external_id
-
-      def initialize(params ={})
-        @email = params[:email]
-        @external_id = params[:external_id]
-      end
-
-      def to_s
-        "#{self.class.name} => { email: #{@email}, external_id: #{@external_id} }"
-      end
-    end
-    
     def initialize(oauth_credentials, user_credentials = nil)
       @oauth_credentials = oauth_credentials
       @json_mode = true
     end
 
+    # Get user profile
+    #
+    # ==== Return
+    # * Profile instance
     def profile
       data = decode_response http.get "/m8/feeds/contacts/default/full", {"max-results" => 1}
       email = data["feed"]["id"]["$t"]
@@ -94,6 +84,17 @@ module GoogleClient
       end
     end
 
+    # Create a calendar
+    #
+    # ==== Parameters
+    # * *params* Hash
+    #   * :title
+    #   * :details
+    #   * :timezone
+    #   * :location
+    #
+    # ==== Return
+    # Calendar instance
     def create_calendar(params)
       calendar = if block_given?
                     Calendar.create(params.merge({:user => self}), &Proc.new)
@@ -103,6 +104,7 @@ module GoogleClient
       calendar.save
     end
 
+    # Fetch user contacts
     def contacts
       contacts = decode_response http.get "/m8/feeds/contacts/default/full", {"max-results" => "1000"}
       contacts = contacts["feed"]["entry"]
