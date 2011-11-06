@@ -4,8 +4,8 @@ require File.expand_path('../lib/google_client/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["juandebravo"]
   gem.email         = ["juandebravo@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.summary       = %q{Ease way to get access to Google API.}
+  gem.description   = %q{This gem is a wrapper on top of the Google API that allows a developer to handle calendars, events, contacts on behalf of the user.}
   gem.homepage      = "http://www.github.com/juandebravo/google_client"
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
@@ -21,6 +21,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency("rake")
   gem.add_development_dependency("rspec")
   gem.add_development_dependency("webmock")
-  gem.add_development_dependency("pry")
 
 end
