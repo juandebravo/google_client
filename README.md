@@ -1,31 +1,53 @@
 
-This gem can be used to get access to Google Calendar set of APIs.
+This gem can be used to get access to a specific set of Google APIs.
 
 = Installation
 
     gem install google_client
 
-= Getting started
-
-* **User a user authentication token**
-
-    user = GoogleClient::User.new "user-authentication-token"
-
-* **
-
 = Features
 
-* Fetch the list of user calendars
-* Create a new calendar
-* Retrieve a specific calendar
-* Fetch calendar events, filtering by:
-  * specific event id
-  * time interval
-* Delete calendar
-* Create event
-* Delete event
+* Rails Engine to launch OAuth mechanism
+* Refresh OAuth token
+* Google Calendar
+  * Fetch the list of user calendars
+  * Create a new calendar
+  * Retrieve a specific calendar
+  * Fetch calendar events, filtering by:
+    * specific event id
+    * time interval
+  * Delete calendar
+  * Create event
+  * Delete event
+* Google Contacts
+  * Fetch user contacts
+
+= Getting started
+
+Any request that may be done on behalf of the user needs a valid authentication token:
+
+    require "gogole_client"
+    user = GoogleClient::User.new "user-authentication-token"
+
+Take a look on the [user.rb](blob/master/google_client/user.rb) file to check the available methods
 
 = Roadmap
+
+* Enhance filters
+* Handle contacts
+    * Create a new contact
+    * Delete an existing contact
+    * Update a contact
+* Add XML format support. Currently (except the OAuth requests) all the requests/responses are JSON encoded. It may be nice to add support for XML too.
+
+= Note on Patches/Pull Requests
+
+* Fork the project
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a future version unintentionally.
+* Commit, do not mess with rakefile, version, or history.
+  * If you want to have your own version, that is fine but bump version in a commit by itself so I can ignore when I pull
+* Send me a pull request. Bonus points for topic branches.
 
 = License
 
