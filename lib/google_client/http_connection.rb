@@ -42,7 +42,6 @@ module GoogleClient
       if _headers.has_key?("Content-Type") && _headers["Content-Type"].eql?("json")
         body.is_a?(Hash) and body = body.to_json
       end
-
       RestClient.post(uri.to_s, body, _headers) do |response, request, result, &block|
         handle_response(response, request, result, &block)
       end
@@ -79,36 +78,20 @@ module GoogleClient
       when 301..307
         response.follow_redirection(request, result, &block)
       when 400
-        #logger.warn("Bad request")
-        #logger.warn("#{result.code} => #{result.message}")
-        raise Error.new(result.body)
+        raise BadRequestError.new(result.body)
       when 401
-        #logger.warn("Error while accessing Backchat. Authentication failed")
-        #logger.warn("#{result.code} => #{result.message}")
         raise AuthenticationError.new(result.body)
       when 404
-        #logger.warn("Error while accessing Backchat. Resource not found")
-        #logger.warn("#{result.code} => #{result.message}")
-        raise NotFound.new(result.body)
+        raise NotFoundError.new(result.body)
       when 409
-        #logger.warn("Error while accessing Backchat. Conflict")
-        #logger.warn("#{result.code} => #{result.message}")
-        raise BackchatClient::Error::ConflictError.new(result)
+        raise ConflictError.new(result.body)
       when 422
-        #logger.warn("Error while accessing Backchat. Unprocessable entity")
-        #logger.warn("#{result.code} => #{result.message}")
-        raise BackchatClient::Error::UnprocessableError.new(result)
+        raise Error.new(result.body)
       when 402..408,410..421,423..499
-        #logger.warn("Error while accessing Backchat")
-        #logger.warn("#{result.code} => #{result.message}")
         response.return!(request, result, &block)
       when 500..599
-        #logger.warn("Error while accessing Backchat")
-        #logger.warn("#{result.code} => #{result.message}")
         raise Error.new(result.body)
       else
-        #logger.warn("Error while accessing Backchat")
-        #logger.warn("#{result.code} => #{result.message}")
         response.return!(request, result, &block)
       end
     end
