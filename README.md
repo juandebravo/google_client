@@ -13,9 +13,7 @@ This gem can be used to get access to a specific set of Google APIs.
   * Fetch the list of user calendars
   * Create a new calendar
   * Retrieve a specific calendar
-  * Fetch calendar events, filtering by:
-    * specific event id
-    * time interval
+  * Fetch calendar events, filtering by specific event id, time interval (and more coming)
   * Delete calendar
   * Create event
   * Delete event
@@ -34,6 +32,12 @@ Any request that may be done on behalf of the user needs a valid authentication 
 
     # Get user calendars
     calendars = user.calendars
+
+    # Get a specific user calendar
+    calendar = user.calendars("<calendar-id>")
+
+    # Fetch calendar events
+    events = calendar.events
 
     # Create calendar
     calendar = user.create_calendar({:title => "my-new-calendar", 
