@@ -1,11 +1,11 @@
 
 This gem can be used to get access to a specific set of Google APIs.
 
-= Installation
+# Installation
 
     gem install google_client
 
-= Features
+# Features
 
 * Rails Engine to launch OAuth mechanism
 * Refresh OAuth token
@@ -22,16 +22,29 @@ This gem can be used to get access to a specific set of Google APIs.
 * Google Contacts
   * Fetch user contacts
 
-= Getting started
+# Getting started
 
 Any request that may be done on behalf of the user needs a valid authentication token:
 
     require "gogole_client"
     user = GoogleClient::User.new "user-authentication-token"
 
-Take a look on the [user.rb](blob/master/google_client/user.rb) file to check the available methods
+    # Get user contacts
+    contacts = user.contacts
 
-= Roadmap
+    # Get user calendars
+    calendars = user.calendars
+
+    # Create calendar
+    calendar = user.create_calendar({:title => "my-new-calendar", 
+                          :details => "Hello world", 
+                          :timezone => "Spain", :location => "Barcelona"})
+
+    # ...
+
+Take a look on the [user.rb](blob/master/lib/google_client/user.rb) file to check the available methods
+
+# Roadmap
 
 * Enhance filters
 * Handle contacts
@@ -40,7 +53,7 @@ Take a look on the [user.rb](blob/master/google_client/user.rb) file to check th
     * Update a contact
 * Add XML format support. Currently (except the OAuth requests) all the requests/responses are JSON encoded. It may be nice to add support for XML too.
 
-= Note on Patches/Pull Requests
+# Note on Patches/Pull Requests
 
 * Fork the project
 * Make your feature addition or bug fix.
@@ -49,7 +62,7 @@ Take a look on the [user.rb](blob/master/google_client/user.rb) file to check th
   * If you want to have your own version, that is fine but bump version in a commit by itself so I can ignore when I pull
 * Send me a pull request. Bonus points for topic branches.
 
-= License
+# License
 
     The MIT License
 
