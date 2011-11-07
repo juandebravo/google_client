@@ -1,4 +1,3 @@
-
 This gem can be used to get access to a specific set of Google APIs.
 
 # Installation
@@ -24,27 +23,29 @@ This gem can be used to get access to a specific set of Google APIs.
 
 Any request that may be done on behalf of the user needs a valid authentication token:
 
-    require "gogole_client"
-    user = GoogleClient::User.new "user-authentication-token"
+```ruby
+require "gogole_client"
+user = GoogleClient::User.new "user-authentication-token"
 
-    # Get user contacts
-    contacts = user.contacts
+# Get user contacts
+contacts = user.contacts
 
-    # Get user calendars
-    calendars = user.calendars
+# Get user calendars
+calendars = user.calendars
 
-    # Get a specific user calendar
-    calendar = user.calendars("<calendar-id>")
+# Get a specific user calendar
+calendar = user.calendars("<calendar-id>")
 
-    # Fetch calendar events
-    events = calendar.events
+# Fetch calendar events
+events = calendar.events
 
-    # Create calendar
-    calendar = user.create_calendar({:title => "my-new-calendar", 
-                          :details => "Hello world", 
-                          :timezone => "Spain", :location => "Barcelona"})
-
-    # ...
+# Create calendar
+calendar = user.create_calendar({:title => "my-new-calendar", 
+                      :details => "Hello world", 
+                      :timezone => "Spain", :location => "Barcelona"})
+                      
+# ...
+```
 
 Take a look on the [user.rb](blob/master/lib/google_client/user.rb) file to check the available methods
 
