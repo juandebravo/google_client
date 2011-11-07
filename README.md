@@ -47,7 +47,7 @@ calendar = user.create_calendar({:title => "my-new-calendar",
 # ...
 ```
 
-Take a look on the [user.rb](blob/master/lib/google_client/user.rb) file to check the available methods
+Take a look on the [user.rb](google_client/blob/master/lib/google_client/user.rb) file to check the available methods
 
 # Roadmap
 
