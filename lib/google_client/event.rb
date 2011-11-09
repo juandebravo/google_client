@@ -13,6 +13,7 @@ module GoogleClient
     attr_accessor :end_time
     attr_accessor :location
     attr_accessor :attendees
+    attr_accessor :send_event_notifications
     attr_accessor :comments
 
     def initialize(params = {})
@@ -25,7 +26,8 @@ module GoogleClient
       @calendar_id = params[:calendar_id]
       @calendar = params[:calendar]
       @comments = params[:comments]
-      @attendees = params[:attendees]
+      @attendees = params[:attendees].nil? ? [] : params[:attendees].map{|x| x.kind_of?(String) ? {:email => x} : x}
+      @send_event_notifications = params[:send_event_notifications]
 
       @calendar.nil? or @connection = @calendar.connection
       @json_mode = true
@@ -33,7 +35,7 @@ module GoogleClient
     end
 
     def to_s
-      "#{self.class.name} => { id: #{@id}, title: #{@title}, description: #{@description}, :start_time => #{@start_time}, :end_time => #{@end_time}, :location => #{@location}, :attendees => #{@attendees} }"
+      "#{self.class.name} => { id: #{@id}, title: #{@title}, description: #{@description}, :start_time => #{@start_time}, :end_time => #{@end_time}, :location => #{@location}, :attendees => #{@attendees}, :send_event_notifications => #{@send_event_notifications}, :calendar => #{@calendar} }"
     end
 
     def to_hash
@@ -42,7 +44,9 @@ module GoogleClient
         :details => @description,
         :timeZone => @timezone,
         :when => [{:start => @start_time,
-          :end => @end_time}]
+          :end => @end_time}],
+        :attendees => @attendees.map{|x| {:valueString => x[:name], :email => x[:email]}},
+        :sendEventNotifications  => @send_event_notifications || false
       }.delete_if{|k,v| v.nil?}
     end
 
