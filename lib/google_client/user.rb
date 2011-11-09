@@ -95,7 +95,7 @@ module GoogleClient
     #
     # ==== Return
     # Calendar instance
-    def create_calendar(params)
+    def create_calendar(params = {})
       calendar = if block_given?
                     Calendar.create(params.merge({:user => self}), &Proc.new)
                   else
