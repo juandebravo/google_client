@@ -20,6 +20,7 @@ module GoogleClient
       @timezone = params[:timezone]
       @location = params[:location]
       @json_mode = true
+      block_given? and yield self
     end
 
     def to_s
@@ -103,6 +104,15 @@ module GoogleClient
               :to => (Time.now + time).strftime("%Y-%m-%dT%k:%M:%S").concat(timezone).gsub(/ /,"0")})
     end
 
+    # Create a new event in the calendar
+    # ==== Parameters
+    # * *params* Hash options
+    #   * c.send_event_notifications : true|false
+    #   * c.title                    : event title (string)
+    #   * c.description              : event detail description (string)
+    #   * c.start_time               : start time (time format)
+    #   * c.end_time                 : end time (time format)
+    #   * c.attendees                : array of emails or hashes with :name and :email
     def create_event(params = {})
       event = if block_given?
                     Event.create(params.merge({:calendar => self}), &Proc.new)
