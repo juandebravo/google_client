@@ -106,7 +106,7 @@ module GoogleClient
     # Create a new event in the calendar
     # ==== Parameters
     # * *params* Hash options
-    #   * c.send_event_notifications : true|false
+    #   * c.send_event_notifications : true | false
     #   * c.title                    : event title (string)
     #   * c.description              : event detail description (string)
     #   * c.start_time               : start time (time format)

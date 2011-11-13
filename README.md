@@ -19,6 +19,8 @@ This gem can be used to get access to a specific set of Google APIs.
 * Google Contacts
   * Fetch user contacts
 
+Take a look into [CHANGELOG.md](google_client/blob/master/CHANGELOG.md)
+
 # Getting started
 
 Any request that may be done on behalf of the user needs a valid authentication token:
