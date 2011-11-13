@@ -101,7 +101,7 @@ module GoogleClient
         @calendar.nil? and raise Error.new "calendar or calendar_id must be valid in the event"
         @calendar_id = @calendar.id
       end
-      data = connection.get "/calendar/feeds/#{@calendar_id}/private/full/#{@id}"
+      data = decode_response connection.get "/calendar/feeds/#{@calendar_id}/private/full/#{@id}"
       self.class.build_event data["entry"], @calendar
     end
 
@@ -116,8 +116,17 @@ module GoogleClient
       end
 
       def build_event(data, calendar = nil)
+        data.nil? and return Event.new
+
         attendees = data["gd$who"]
-        attendees.nil? or attendees = attendees.map{|attendee| {:name => attendee["valueString"], :email => attendee["email"]}}
+        attendees.nil? or attendees = attendees.inject([]) do |values, attendee| 
+          if attendee.has_key?("gd$attendeeStatus")
+            values << { :name   => attendee["valueString"], 
+              :email  => attendee["email"], 
+              :status => attendee["gd$attendeeStatus"]["value"].split("\.").last}
+          end
+          values
+        end
 
         start_time = data["gd$when"][0]["startTime"]
         end_time = data["gd$when"][0]["endTime"]
