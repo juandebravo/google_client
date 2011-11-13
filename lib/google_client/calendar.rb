@@ -79,8 +79,7 @@ module GoogleClient
         events = events["feed"]["entry"]
         events.map{ |event| Event.build_event(event, self)}
       elsif args.is_a?(String)
-        raise Error.new "Unable to fetch a Event by id"
-        #Event.new({:id => args, :calendar => self}).fetch
+        Event.new({:id => args, :calendar => self}).fetch
       elsif args.is_a?(Hash)
         if args.is_a?(Hash) && args.has_key?(:id)
           Event.new({:id => args[:id], :calendar => self}).fetch
