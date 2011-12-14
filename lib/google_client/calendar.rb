@@ -24,7 +24,7 @@ module GoogleClient
     end
 
     def to_s
-      "#{self.class.name} => { id: #{@id}, title: #{@title}, :timezone => #{@timezone}, :location => #{@location} }"
+      "#{self.class.name} => { id: #{@id}, title: #{@title}, timezone => #{@timezone}, location => #{@location} }"
     end
 
     def connection
@@ -97,7 +97,7 @@ module GoogleClient
     end
 
     ##
-    # Fetch forthcoming events in the folowing *time* minutes
+    # Fetch forthcoming events in the following *time* minutes
     def forthcoming_events(time = 3600)
       events({:from => Time.now.strftime("%Y-%m-%dT%k:%M:%S").concat(timezone).gsub(/ /,"0"),
               :to => (Time.now + time).strftime("%Y-%m-%dT%k:%M:%S").concat(timezone).gsub(/ /,"0")})

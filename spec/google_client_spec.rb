@@ -2,8 +2,12 @@ require 'google_client'
 
 describe GoogleClient do
   describe "while initializing" do
-    it "should set the OAuth credentials properly" do
-      GoogleClient.create_client("oauth_token").oauth_credentials.should eql("oauth_token")
+    subject { GoogleClient.create_client("oauth_token") }
+
+    it "should return a GoogleClient::User instance" do
+      subject.should be_instance_of GoogleClient::User
     end
+    
+    its(:oauth_credentials) { should == "oauth_token" }
   end
 end
