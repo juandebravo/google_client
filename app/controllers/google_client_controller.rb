@@ -9,9 +9,11 @@ class GoogleClientController < ApplicationController
   # OAuth step1: redirect to Google endpoint with the application idenfitifer and the redirect uri
   def index
     _params = {
-      :redirect_uri => Rails.application.config.google_client.redirect_uri,
-      :response_type => "code",
-      :scope => Rails.application.config.google_client.scope,
+      :redirect_uri    => Rails.application.config.google_client.redirect_uri,
+      :response_type   => "code",
+      :scope           => Rails.application.config.google_client.scope,
+      :access_type     => Rails.application.config.google_client.access_type.nil? ? "online" : Rails.application.config.google_client.access_type,
+      #:approval_prompt => Rails.application.config.google_client.approval_prompt.nil? ? "force" : Rails.application.config.google_client.approval_prompt
     }
     _params.merge!(DEFAULT_PARAMS)
     
@@ -24,10 +26,10 @@ class GoogleClientController < ApplicationController
     # This code is retrieved from Google
 
     _params = {
-      :redirect_uri => Rails.application.config.google_client.redirect_uri,
+      :redirect_uri  => Rails.application.config.google_client.redirect_uri,
       :client_secret => Rails.application.config.google_client.client_secret,
-      :grant_type => "authorization_code",
-      :code => params[:code]
+      :grant_type    => "authorization_code",
+      :code          => params[:code]
     }
 
     _params.merge!(DEFAULT_PARAMS)
