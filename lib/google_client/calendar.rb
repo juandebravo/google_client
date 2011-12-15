@@ -10,19 +10,24 @@ module GoogleClient
     attr_accessor :details
     attr_accessor :timezone
     attr_accessor :location
+    attr_accessor :color
 
-    def initialize(params)
-      @user = params[:user]
-      @user.nil? or @connection = @user.connection
-      @id = params[:calendar_id] || params[:id]
-      @title = params[:title]
-      @details = params[:details]
-      @timezone = params[:timezone]
-      @location = params[:location]
-      @json_mode = true
+    def initialize(params = {})
+      params.has_key?(:user) or raise ArgumentError.new "calendar must belong to a user"
+      @user       = params[:user]
+      @connection = @user.connection
+      @id         = params[:calendar_id] || params[:id]
+      @title      = params[:title]
+      @details    = params[:details]
+      @timezone   = params[:timezone]
+      @location   = params[:location]
+      @color      = params[:color]
+
       block_given? and yield self
     end
 
+    ##
+    # Print relevant information about the calendar
     def to_s
       "#{self.class.name} => { id: #{@id}, title: #{@title}, timezone => #{@timezone}, location => #{@location} }"
     end
@@ -34,7 +39,8 @@ module GoogleClient
     ##
     # Save the Calendar in the server
     # 
-    # @return Event instance
+    # ==== Return
+    # [Event] instance
     def save
       if @id.nil?
         data = decode_response connection.post("/calendar/feeds/default/owncalendars/full", {:data => self.to_hash})
@@ -53,10 +59,11 @@ module GoogleClient
 
     def to_hash
       {
-        :title => @title,
-        :details => @details,
+        :title    => @title,
+        :details  => @details,
         :timeZone => @timezone,
-        :location => @location
+        :location => @location,
+        :color    => @color,
       }.delete_if{|k,v| v.nil?}
     end
 

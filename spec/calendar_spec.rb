@@ -3,6 +3,7 @@ require 'spec_helper'
 require 'webmock/rspec'
 
 describe GoogleClient::Calendar do
+
   let(:user) do
     GoogleClient::User.new(USER_TOKEN)
   end
@@ -11,17 +12,39 @@ describe GoogleClient::Calendar do
     GoogleClient::Calendar.new({:user => user, :id => CALENDAR_ID})
   end
 
+  let :full_calendar do
+    GoogleClient::Calendar.new({:user => user}) do |c|
+      c.title    = "title"
+      c.details  = "details"
+      c.timezone = "timezone"
+      c.location = "location"
+      c.color    = "color"
+    end
+  end
+
   describe "while initializing" do    
     it "should set the OAuth credentials properly" do
-      user.oauth_credentials.should eql(USER_TOKEN)
+      calendar.instance_variable_get("@user").should == user
     end
 
+    it "should raise an exception if not user received" do
+      lambda { GoogleClient::Calendar.new }.should raise_error ArgumentError
+    end
+
+    it "should set properly the instance variables" do
+      full_calendar.title.should    == "title"
+      full_calendar.details.should  == "details"
+      full_calendar.timezone.should == "timezone"
+      full_calendar.location.should == "location"
+      full_calendar.color.should    == "color"
+    end
   end
 
   describe "while fetching events" do
     it "should fetch all the calendar events when no param is provided" do      
       http_connection = double("HttpConnection")
       response = double("HttpResponse")
+
       response.stub(:code) { 200 }
       response.stub(:body) { "{\"version\":\"1.0\",\"encoding\":\"UTF-8\",\"feed\":\
         {\"xmlns\":\"http://www.w3.org/2005/Atom\",\"xmlns$openSearch\":\"http://a9.com/-/spec/opensearchrss/1.0/\",\
@@ -60,11 +83,27 @@ describe GoogleClient::Calendar do
       events.length.should == 1
       event = events[0]
       event.should be_instance_of GoogleClient::Event
-      event.id.should == "001q3b6f0n268mea33o59dopvs"
-      event.title.should == "This is a cool event"
+      event.id.should          == "001q3b6f0n268mea33o59dopvs"
+      event.title.should       == "This is a cool event"
       event.description.should == "foo => bar"
-      event.start_time.should == "2011-11-14T00:12:07.000+02:00"
-      event.end_time.should == "2011-11-14T00:13:07.000+02:00"
+      event.start_time.should  == "2011-11-14T00:12:07.000+02:00"
+      event.end_time.should    == "2011-11-14T00:13:07.000+02:00"
+    end
+  end
+
+  describe "while creating a calendar" do
+    it "should create a valid calendar in Google" do
+      http_connection = double("HttpConnection")
+      response = double("HttpResponse")
+      response.stub(:code) { 200 }
+      response.stub(:body) { '{"data":{"id":"full/foo"}}' }
+      http_connection.stub(:post).with("/calendar/feeds/default/owncalendars/full", {:data => full_calendar.to_hash}) {
+          response
+      }
+      full_calendar.stub(:connection) { http_connection }
+
+      full_calendar.save
+      full_calendar.id.should == 'foo'
     end
   end
 
