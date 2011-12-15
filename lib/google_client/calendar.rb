@@ -23,6 +23,8 @@ module GoogleClient
       @location   = params[:location]
       @color      = params[:color]
 
+      @json_mode = true
+
       block_given? and yield self
     end
 
