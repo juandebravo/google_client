@@ -108,8 +108,8 @@ module GoogleClient
     ##
     # Fetch forthcoming events in the following *time* minutes
     def forthcoming_events(time = 3600)
-      events({:from => Time.now.strftime("%Y-%m-%dT%k:%M:%S").concat(timezone).gsub(/ /,"0"),
-              :to => (Time.now + time).strftime("%Y-%m-%dT%k:%M:%S").concat(timezone).gsub(/ /,"0")})
+      events({:from => Time.now.strftime("%Y-%m-%dT%k:%M:%S").concat(Calendar.timezone).gsub(/ /,"0"),
+              :to => (Time.now + time).strftime("%Y-%m-%dT%k:%M:%S").concat(Calendar.timezone).gsub(/ /,"0")})
     end
 
     # Create a new event in the calendar
@@ -139,7 +139,7 @@ module GoogleClient
     end
 
     # Helper to get the Timezone in rfc3339 format
-    def timezone
+    def self.timezone
       @@timezone ||= (
       timezone = Time.now.strftime("%z")
       timezone[0..2].concat(":").concat(timezone[3..-1])
