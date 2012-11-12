@@ -42,8 +42,8 @@ module GoogleClient
         :refresh_token => refresh_token,
         :grant_type => "refresh_token"
       }
-      data = HttpConnection.new("https://accounts.google.com", 
-                                    {:alt => "json"}, 
+      data = HttpConnection.new("https://accounts.google.com",
+                                    {:alt => "json"},
                                     {:Authorization => "OAuth #{oauth_credentials}",
                                      "Content-Type" => "application/x-www-form-urlencoded",
                                      :Accept => "application/json"}).post "/o/oauth2/token", _params
@@ -58,7 +58,7 @@ module GoogleClient
     end
 
     ##
-    # 
+    #
     # ==== Parameters
     # * *calendar_id* Calendar unique identifier
     #
@@ -107,7 +107,7 @@ module GoogleClient
     # Fetch user contacts
     def contacts
       contacts = decode_response http.get "/m8/feeds/contacts/default/full", {"max-results" => "1000"}
-      contacts = contacts["feed"]["entry"]
+      contacts = contacts["feed"]["entry"] || []
       contacts.map{|contact| Contact.build_contact(contact, self)}
     end
 
@@ -117,8 +117,8 @@ module GoogleClient
     # ==== Return
     # * *HttpConnection* instance
     def http
-      @http ||= HttpConnection.new("https://www.google.com", 
-                                    {:alt => "json"}, 
+      @http ||= HttpConnection.new("https://www.google.com",
+                                    {:alt => "json"},
                                     {:Authorization => "OAuth #{oauth_credentials}",
                                      "Content-Type" => "json",
                                      :Accept => "application/json"})
